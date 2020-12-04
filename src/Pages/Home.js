@@ -12,11 +12,12 @@ class HomePage extends Component {
 
     render() {
         const name = this.props.name;
+        const greeting = this.props.greeting;
 
         return (
             <div>
                 <div>
-                    <p>Hello {name}</p>
+                    <p>{greeting}, {name}</p>
                     <button onClick={this.logout}>Logout</button>
                 </div>
 

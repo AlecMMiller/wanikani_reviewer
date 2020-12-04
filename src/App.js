@@ -11,6 +11,23 @@ class App extends Component {
     this.checkAuthentication = this.checkAuthentication.bind(this);
     this.logout = this.logout.bind(this);
 
+    const d = new Date();
+    const hours = d.getHours();
+
+    var greeting =''
+
+    if(hours < 3 || hours > 22){
+      greeting = "おやすみんさい";
+    } else if (hours < 12){
+      greeting = "おはようございます";
+    } else if (hours < 18){
+      greeting = "こんにちは";
+    } else {
+      greeting = "こんばんは"
+    }
+
+    console.log(greeting);
+
     let existing_key = Cookies.get('api-key');
     let is_authenticated = false
     if (existing_key) {
@@ -18,22 +35,18 @@ class App extends Component {
       this.checkAuthentication(existing_key);
     }
 
-    this.state = { isAuthenticated: is_authenticated, username: '' };
+    this.state = { isAuthenticated: is_authenticated, username: '', greeting: greeting };
   }
 
   checkAuthentication(api_key) {
-    this.getUsername(api_key).then((username) => {
+    GetUsername(api_key).then((username) => {
       if (username) {
         this.setState({ username: username, isAuthenticated: 'TRUE' });
         Cookies.set('api-key', api_key);
+      } else {
+        this.logout();
       }
     })
-  }
-
-  async getUsername(api_key) {
-    let username = await GetUsername(api_key);
-    console.log(username);
-    return username;
   }
 
   logout() {
@@ -43,7 +56,7 @@ class App extends Component {
 
   render() {
     if (this.state.isAuthenticated) {
-      return <HomePage logout={this.logout} name={this.state.username} />
+      return <HomePage logout={this.logout} name={this.state.username} greeting={this.state.greeting} />
     } else {
       return <LoginPage checkLogin={this.checkAuthentication} />
     }
