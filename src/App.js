@@ -1,35 +1,52 @@
 import './App.css';
-import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
-import Home from "./Pages/Home";
-import Login from "./Pages/Login";
+import LoginPage from "./Pages/Login";
 import Cookies from 'js-cookie';
 import { Component, React } from 'react';
+import HomePage from './Pages/Home';
+import { GetUsername } from './Wanikani'
 
-function App() {
-  console.log("Did a thing")
-  return (
-    <Router>
-      <Route path="/login" exact component={Login} />
-      <ProtectedRoute path="/" exact component={Home} />
-    </Router>
-  )
-}
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.checkAuthentication = this.checkAuthentication.bind(this);
+    this.logout = this.logout.bind(this);
 
-class ProtectedRoute extends Component {
+    let existing_key = Cookies.get('api-key');
+    let is_authenticated = false
+    if (existing_key) {
+      is_authenticated = true
+      this.checkAuthentication(existing_key);
+    }
+
+    this.state = { isAuthenticated: is_authenticated, username: '' };
+  }
+
+  checkAuthentication(api_key) {
+    this.getUsername(api_key).then((username) => {
+      if (username) {
+        this.setState({ username: username, isAuthenticated: 'TRUE' });
+        Cookies.set('api-key', api_key);
+      }
+    })
+  }
+
+  async getUsername(api_key) {
+    let username = await GetUsername(api_key);
+    console.log(username);
+    return username;
+  }
+
+  logout() {
+    this.setState({ isAuthenticated: false, username: '' });
+    Cookies.remove('api-key');
+  }
 
   render() {
-      const Component = this.props.component;
-      const isAuthenticated = Cookies.get('api-key')
-      console.log(isAuthenticated);
-
-      if(isAuthenticated){
-        console.log('Yup')
-        return <Component />
-      } else {
-        console.log('Nope')
-        return <Redirect to={{ pathname: '/login' }} />
-      }
-     
+    if (this.state.isAuthenticated) {
+      return <HomePage logout={this.logout} name={this.state.username} />
+    } else {
+      return <LoginPage checkLogin={this.checkAuthentication} />
+    }
   }
 }
 
