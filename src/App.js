@@ -41,7 +41,7 @@ class App extends Component {
   checkAuthentication(api_key) {
     GetUsername(api_key).then((username) => {
       if (username) {
-        this.setState({ username: username, isAuthenticated: 'TRUE' });
+        this.setState({ username: username, isAuthenticated: true });
         Cookies.set('api-key', api_key);
       } else {
         this.logout();
