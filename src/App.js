@@ -26,16 +26,20 @@ class App extends Component {
       greeting = "こんばんは"
     }
 
-    console.log(greeting);
-
     let existing_key = Cookies.get('api-key');
     let is_authenticated = false
     if (existing_key) {
-      is_authenticated = true
-      this.checkAuthentication(existing_key);
+      is_authenticated = true;
     }
 
     this.state = { isAuthenticated: is_authenticated, username: '', greeting: greeting };
+  }
+
+  componentDidMount(){
+    if(!this.state.username){
+      let existing_key = Cookies.get('api-key');
+      this.checkAuthentication(existing_key);
+    }
   }
 
   checkAuthentication(api_key) {
