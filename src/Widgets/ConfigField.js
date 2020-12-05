@@ -8,10 +8,6 @@ class ConfigField extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    get(){
-        return this.state.value;
-    }
-
     handleChange(event){
         const newValue =  event.target.value;
         this.setDefault(newValue);
