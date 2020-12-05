@@ -1,31 +1,36 @@
 import './App.css';
+
 import LoginPage from "./Pages/Login";
+import HomePage from './Pages/Home';
+import LoadingPage from './Pages/Loading'
+
 import Cookies from 'js-cookie';
 import { Component, React } from 'react';
-import HomePage from './Pages/Home';
 import { GetUsername } from './Wanikani'
+import PAGES from './Pages';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.checkAuthentication = this.checkAuthentication.bind(this);
-    this.logout = this.logout.bind(this); 
+    this.logout = this.logout.bind(this);
+    this.startReview = this.startReview.bind(this);
 
     const existing_key = Cookies.get('api-key');
-    let is_authenticated = false;
+    let page = PAGES.login;
     let username = ''
     if (existing_key) {
-      is_authenticated = true;
+      page = PAGES.config;
       username = Cookies.get('username');
     }
 
-    this.state = { isAuthenticated: is_authenticated, username: username };
+    this.state = { page: page, username: username };
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
     // Validate existing API key if any
-    if(this.state.is_authenticated){
+    if (this.state.page === PAGES.config) {
       let existing_key = Cookies.get('api-key');
       this.checkAuthentication(existing_key);
     }
@@ -35,27 +40,35 @@ class App extends Component {
   checkAuthentication(api_key) {
     GetUsername(api_key).then((username) => {
       if (username) {
-        this.setState({ username: username, isAuthenticated: true });
+        this.setState({ username: username, page: PAGES.config });
         Cookies.set('api-key', api_key);
         Cookies.set('username', username);
-      } else if (this.state.isAuthenticated) {
+      } else if (!this.state.page === PAGES.login) {
         this.logout();
       }
     })
   }
 
   logout() {
-    this.setState({ isAuthenticated: false, username: '' });
+    this.setState({ page: PAGES.login, username: '' });
     Cookies.remove('api-key');
   }
 
+  startReview(percent, days) {
+    this.setState({page: PAGES.loading});
+  }
+
   render() {
-    if (this.state.isAuthenticated) {
-      return <HomePage logout={this.logout} name={this.state.username} />
-    } else {
-      return <LoginPage checkLogin={this.checkAuthentication} />
+    switch (this.state.page) {
+      case PAGES.login:
+        return <LoginPage checkLogin={this.checkAuthentication} />
+      case PAGES.config:
+        return <HomePage logout={this.logout} name={this.state.username} start={this.startReview} />
+      case PAGES.loading:
+        return <LoadingPage />
     }
   }
 }
 
 export default App;
+

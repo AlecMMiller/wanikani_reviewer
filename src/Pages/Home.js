@@ -25,7 +25,7 @@ class HomePage extends Component {
         const percent = this.state.percent_threshold;
         const days = this.state.days_to_review;
 
-        console.log([percent, days]);
+        this.props.start(percent, days)
     }
 
     updateDaysToReview(value){
