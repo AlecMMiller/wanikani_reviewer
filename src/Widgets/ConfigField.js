@@ -27,7 +27,7 @@ class ConfigField extends Component {
             this.setDefault(value);
 
         // If value from cookie does not match value from parent, update parent
-        } else if(value!=this.props.defaultValue){
+        } else if(value!==this.props.defaultValue){
             this.props.onChange(value);
         }
 
