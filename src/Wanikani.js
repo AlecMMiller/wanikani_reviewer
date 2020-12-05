@@ -64,6 +64,10 @@ function getFetchPromise(url_end, params, token){
 }
 
 async function getUsername(apiToken){
+    if(apiToken === 'test'){
+        return 'TestUser';
+    }
+
     const url_end = 'user';
     let response = await getFetchPromise(url_end, null, apiToken);
     

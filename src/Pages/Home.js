@@ -1,4 +1,5 @@
 import { Component, React } from 'react';
+import {NumberConfigField} from '../Widgets/ConfigField';
 
 class HomePage extends Component {
     constructor(props) {
@@ -11,7 +12,7 @@ class HomePage extends Component {
         this.props.logout();
     }
 
-    startReview(){
+    startReview() {
         console.log('starting');
     }
 
@@ -28,10 +29,8 @@ class HomePage extends Component {
 
                 <div>
                     <h1>Review Settings</h1>
-                    <p>Days Old</p>
-                    <input type="text" id="days" defaultValue='30' /><br/>
-                    <p>Percent Threshold</p>
-                    <input type="text" id="" defaultValue='85' /><br/>
+                    <NumberConfigField title='Days to review' description='days' defaultValue='30' cookie='review-days'/>
+                    <NumberConfigField title='Percent Threshold' description='days' defaultValue='85' cookie='review-percent'/>
                     <button onClick={this.startReview}>Review</button>
                 </div>
 

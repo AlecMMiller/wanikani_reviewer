@@ -5,16 +5,11 @@ import { Component, React } from 'react';
 import HomePage from './Pages/Home';
 import { GetUsername } from './Wanikani'
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.checkAuthentication = this.checkAuthentication.bind(this);
-    this.logout = this.logout.bind(this);
+function getGreeting(){
+  const d = new Date();
+  const hours = d.getHours();
 
-    const d = new Date();
-    const hours = d.getHours();
-
-    var greeting =''
+  var greeting =''
 
     if(hours < 3 || hours > 22){
       greeting = "おやすみんさい";
@@ -26,20 +21,36 @@ class App extends Component {
       greeting = "こんばんは"
     }
 
-    let existing_key = Cookies.get('api-key');
-    let is_authenticated = false
+    return greeting;
+}
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.checkAuthentication = this.checkAuthentication.bind(this);
+    this.logout = this.logout.bind(this);
+
+    const greeting = getGreeting();    
+
+    const existing_key = Cookies.get('api-key');
+    let is_authenticated = false;
+    let username = ''
     if (existing_key) {
       is_authenticated = true;
+      username = Cookies.get('username');
     }
 
-    this.state = { isAuthenticated: is_authenticated, username: '', greeting: greeting };
+    this.state = { isAuthenticated: is_authenticated, username: username, greeting: greeting };
   }
 
   componentDidMount(){
-    if(!this.state.username){
+
+    // Validate existing API key if any
+    if(this.state.is_authenticated){
       let existing_key = Cookies.get('api-key');
       this.checkAuthentication(existing_key);
     }
+
   }
 
   checkAuthentication(api_key) {
@@ -47,7 +58,8 @@ class App extends Component {
       if (username) {
         this.setState({ username: username, isAuthenticated: true });
         Cookies.set('api-key', api_key);
-      } else {
+        Cookies.set('username', username);
+      } else if (this.state.isAuthenticated) {
         this.logout();
       }
     })
