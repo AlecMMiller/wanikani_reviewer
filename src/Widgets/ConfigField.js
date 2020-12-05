@@ -5,17 +5,17 @@ class ConfigField extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            value: this.getDefault(),
-        }
-
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    get(){
+        return this.state.value;
     }
 
     handleChange(event){
         const newValue =  event.target.value;
-        this.setState({value: newValue});
         this.setDefault(newValue);
+        this.props.onChange(newValue);
     }
 
     setDefault(value){
@@ -25,9 +25,14 @@ class ConfigField extends Component {
     getDefault(){
         let value = Cookies.get(this.props.cookie);
 
+        // Set a cookie if none exists
         if(!value){
             value = this.props.defaultValue;
             this.setDefault(value);
+
+        // If value from cookie does not match value from parent, update parent
+        } else if(value!=this.props.defaultValue){
+            this.props.onChange(value);
         }
 
         return value;
@@ -35,7 +40,7 @@ class ConfigField extends Component {
 
     render(){
         const title = this.props.title;
-        const defaultValue = this.state.value;
+        const defaultValue = this.getDefault();
 
         return(
             <div>
@@ -48,9 +53,7 @@ class ConfigField extends Component {
 
 class NumberConfigField extends ConfigField {
     handleChange(event){
-        console.log(event);
         let targetVal = event.target.value;
-        console.log(targetVal);
         
         super.handleChange(event);
     }
