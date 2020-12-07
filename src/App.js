@@ -6,8 +6,9 @@ import LoadingPage from './Pages/Loading'
 
 import Cookies from 'js-cookie';
 import { Component, React } from 'react';
-import { GetUsername } from './Wanikani'
+import { GetUsername, GetLeeches } from './Wanikani'
 import PAGES from './Pages';
+import ReviewPage from './Pages/Review';
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class App extends Component {
       username = Cookies.get('username');
     }
 
-    this.state = { page: page, username: username };
+    this.state = { page: page, username: username, api_key: existing_key };
   }
 
   componentDidMount() {
@@ -40,7 +41,7 @@ class App extends Component {
   checkAuthentication(api_key) {
     GetUsername(api_key).then((username) => {
       if (username) {
-        this.setState({ username: username, page: PAGES.config });
+        this.setState({ username: username, page: PAGES.config, api_key: api_key });
         Cookies.set('api-key', api_key);
         Cookies.set('username', username);
       } else if (!this.state.page === PAGES.login) {
@@ -56,6 +57,11 @@ class App extends Component {
 
   startReview(percent, days) {
     this.setState({page: PAGES.loading});
+
+    GetLeeches(this.state.api_key, percent, days).then((leeches) => {
+      console.log(leeches);
+      this.setState({page: PAGES.reviewing});
+    })
   }
 
   render() {
@@ -66,6 +72,8 @@ class App extends Component {
         return <HomePage logout={this.logout} name={this.state.username} start={this.startReview} />
       case PAGES.loading:
         return <LoadingPage />
+      case PAGES.reviewing:
+        return <ReviewPage />
     }
   }
 }
