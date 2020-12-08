@@ -6,7 +6,7 @@ import LoadingPage from './Pages/Loading'
 
 import Cookies from 'js-cookie';
 import { Component, React } from 'react';
-import { GetUsername, GetLeeches } from './Wanikani'
+import { GetUsername, GetLeeches, GetSubject } from './Wanikani'
 import PAGES from './Pages';
 import ReviewPage from './Pages/Review';
 
@@ -16,6 +16,8 @@ class App extends Component {
     this.checkAuthentication = this.checkAuthentication.bind(this);
     this.logout = this.logout.bind(this);
     this.startReview = this.startReview.bind(this);
+    this.leeches = null;
+    this.first_leech = null;
 
     const existing_key = Cookies.get('api-key');
     let page = PAGES.login;
@@ -59,8 +61,12 @@ class App extends Component {
     this.setState({page: PAGES.loading});
 
     GetLeeches(this.state.api_key, percent, days).then((leeches) => {
-      console.log(leeches);
-      this.setState({page: PAGES.reviewing});
+      this.leeches = leeches;
+      const first_leech_id = leeches[0].id;
+      GetSubject(this.state.api_key, first_leech_id).then(first_leech => {
+        this.first_leech = first_leech;
+        this.setState({page: PAGES.reviewing});
+      })
     })
   }
 
@@ -73,7 +79,7 @@ class App extends Component {
       case PAGES.loading:
         return <LoadingPage />
       case PAGES.reviewing:
-        return <ReviewPage />
+        return <ReviewPage leeches={this.leeches} first_leech={this.first_leech} api_key={this.state.api_key} />
     }
   }
 }
