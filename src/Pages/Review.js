@@ -7,7 +7,6 @@ class ReviewPage extends Component {
         this.num_reviews = this.props.leeches.length;
         this.incrementReview = this.incrementReview.bind(this);
         this.review_number = 1;
-        console.log("There are " + this.num_reviews + " leeches");
         this.state = { current_leech: this.props.first_leech };
         this.queueLeech(1);
         
@@ -17,7 +16,6 @@ class ReviewPage extends Component {
         if(leech_index >= this.num_reviews){
             return;
         }
-        console.log("Getting leech " + leech_index);
         const uuid = this.props.leeches[leech_index].id;
         GetSubject(this.props.api_key, uuid).then((next_leech) => {
             this.next_leech = next_leech;
@@ -29,7 +27,6 @@ class ReviewPage extends Component {
             this.props.endReview();
             return;
         }
-        console.log("incrementing review")
         this.review_number += 1;
         this.setState({current_leech: this.next_leech});
         this.queueLeech(this.review_number);

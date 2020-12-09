@@ -72,12 +72,10 @@ class App extends Component {
   }
 
   endReview() {
-    console.log('Ending review');
     this.setState({page: PAGES.config});
   }
 
   render() {
-    console.log("Rendering");
     switch (this.state.page) {
       case PAGES.login:
         return <LoginPage checkLogin={this.checkAuthentication} />
