@@ -16,6 +16,7 @@ class App extends Component {
     this.checkAuthentication = this.checkAuthentication.bind(this);
     this.logout = this.logout.bind(this);
     this.startReview = this.startReview.bind(this);
+    this.endReview = this.endReview.bind(this);
     this.leeches = null;
     this.first_leech = null;
 
@@ -70,7 +71,13 @@ class App extends Component {
     })
   }
 
+  endReview() {
+    console.log('Ending review');
+    this.setState({page: PAGES.config});
+  }
+
   render() {
+    console.log("Rendering");
     switch (this.state.page) {
       case PAGES.login:
         return <LoginPage checkLogin={this.checkAuthentication} />
@@ -79,7 +86,7 @@ class App extends Component {
       case PAGES.loading:
         return <LoadingPage />
       case PAGES.reviewing:
-        return <ReviewPage leeches={this.leeches} first_leech={this.first_leech} api_key={this.state.api_key} />
+        return <ReviewPage leeches={this.leeches} first_leech={this.first_leech} api_key={this.state.api_key} endReview={this.endReview} />
     }
   }
 }
