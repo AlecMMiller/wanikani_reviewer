@@ -149,7 +149,6 @@ function match_hiragana_3(roman){
 class JapaneseInput extends Component {
     constructor(props) {
         super(props);
-
         this.handleInput = this.handleInput.bind(this);
         this.state = {
             inputValue: ''
@@ -204,6 +203,10 @@ class JapaneseInput extends Component {
             
         } else {
             var new_text = old_text;
+        }
+        
+        if(this.props.answers.includes(new_text)){
+            console.log("yay!");
         }
 
         this.setState({

@@ -10,7 +10,6 @@ class ReviewPage extends Component {
         this.review_number = 1;
         this.state = { current_leech: this.props.first_leech };
         this.queueLeech(1);
-
     }
 
     queueLeech(leech_index) {
@@ -34,12 +33,14 @@ class ReviewPage extends Component {
     }
 
     render() {
+        let readings = []
+        this.state.current_leech.readings.forEach(element => readings.push(element.reading));
         return (
             <div>
                 <p>{this.review_number}/{this.num_reviews}</p>
                 <p>{this.state.current_leech.characters}</p>
                 <button onClick={this.incrementReview}>Next Review</button>
-                <JapaneseInput />
+                <JapaneseInput answers={readings}/>
             </div >
         )
     }

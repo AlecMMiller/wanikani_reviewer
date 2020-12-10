@@ -29,7 +29,7 @@ function compareLeeches( a, b ) {
 
 async function GetLeeches(apiToken, percent, days) {
     if (apiToken === 'test') {
-        return([0, 0], [1, 1], [2, 2]);
+        return([[0, 0], [1, 1], [2, 2]]);
     }
 
     const url_end = 'review_statistics';
