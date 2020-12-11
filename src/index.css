@@ -3,7 +3,7 @@ html, body, #root, .App {
 }
 
 body {
-  background-color: #302f35;
+  background-color: #f8f8ff;
   margin: 0;
   padding: 0;
 }
@@ -27,14 +27,36 @@ body {
 }
 
 .login_content {
+  color: #e3f0eb;
   position: absolute;
   right: 7vw;
   top: 2vw;
 }
 
 .login_description {
-  color: #e3f0eb;
   font-size: 2vw;
   margin-block-start: 0;
   margin-block-end: 1vw;
+  margin: 0;
+  padding: 0;
+  margin-block-start: 0;
+  margin-block-end: .3vh;
+}
+
+.login_hint {
+  margin: 0;
+  padding: 0;
+  margin-block-start: 0;
+  margin-block-end: 3vh;
+  font-size: 1.2vw;
+}
+
+.api_input {
+  width: 70%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }

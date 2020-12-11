@@ -17,9 +17,9 @@ class LoginPage extends Component {
         <div className='login_content'>
           <h1 className='title'>ようこそ!</h1>
           <p className='login_description'>Please enter your API key</p>
-          <input type="text" id="api_key" /><br />
+          <p className='login_hint'>(You can get it <a href="https://www.wanikani.com/settings/personal_access_tokens" target="_blank">here</a>)</p>
+          <input class='api_input' type="text" id="api_key" placeholder="API Key" /><br />
           <button onClick={this.checkLogin}>Login</button>
-          <p>Get your API key <a href="https://www.wanikani.com/settings/personal_access_tokens" target="_blank">here</a></p>
         </div>
       </div>
     )
