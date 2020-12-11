@@ -50,8 +50,8 @@ class HomePage extends Component {
                     <button onClick={this.logout}>Logout</button>
                 </div>
 
-                <div>
-                    <h1>Review Settings</h1>
+                <div className='config_box'>
+                    <h1>Set Up Review</h1>
                     <NumberConfigField title='Days to review' description='days' defaultValue={days_to_review} cookie='review-days' onChange={this.updateDaysToReview} />
                     <NumberConfigField title='Percent Threshold' description='days' defaultValue={percent_threshold} cookie='review-percent' onChange={this.updatePercentThreshold}/>
                     <button onClick={this.startReview}>Review</button>
